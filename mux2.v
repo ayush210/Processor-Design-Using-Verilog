@@ -1,4 +1,4 @@
-module mux2(in0,in1,out,select);
+module mux2(in0,in1,select,out);
 input[31:0] in0,in1;
 input select;
 output[31:0] out;
@@ -17,7 +17,7 @@ module test;
 reg[31:0] in0,in1;
 wire[31:0] out;
 reg select;
-mux2 m(in0,in1,out,select);
+mux2 m(in0,in1,select,out);
 initial begin
 $monitor($time,"in0=%d in1=%d out=%d select=%d",in0,in1,out,select);
 select = 0; in0=0;in1=1;
