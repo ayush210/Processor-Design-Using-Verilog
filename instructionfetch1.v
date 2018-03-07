@@ -80,7 +80,7 @@ output[31:0] out;
 reg[31:0] out;
 always @(posedge clk)
 		begin
-		out=in0;
+		out<=in0;
 		end
 
 endmodule
@@ -114,7 +114,7 @@ reg [31:0]out;
 reg[31:0] memory[31:0];
 always @(*)
 		begin
-		out <= memory[address];
+		out = memory[address];
 		end
 initial begin
 memory[0] = 1;
@@ -143,7 +143,7 @@ reg[31:0] out;
 input clk;
 always @(posedge clk)
 		 begin
-		 out <= in0;
+		 out = in0;
 		 end
 endmodule
 
