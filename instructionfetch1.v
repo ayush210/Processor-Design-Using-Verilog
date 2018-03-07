@@ -5,7 +5,7 @@ output[31:0] out;
 reg[31:0] out;
 always@(*)
 		begin
-		out<= pc+4;
+		out=pc+4;
 		end
 endmodule
 
@@ -18,8 +18,8 @@ wire[31:0] in0,in1;
 always @(*)
 		begin
 		case(select)
-		0: out<=in0;
-		1: out<=in1;
+		0: out=in0;
+		1: out=in1;
 		endcase
 		end
 endmodule
@@ -46,10 +46,10 @@ wire[1:0] select;
 always @(*)
 begin
 		case(select)	
-        0:out<=in0;
-		1:out<=in1;
-		2: out<=in2;
-		3: out<=in3;
+        0:out=in0;
+		1:out=in1;
+		2: out=in2;
+		3: out=in3;
 		endcase
 end
 endmodule
@@ -80,7 +80,7 @@ output[31:0] out;
 reg[31:0] out;
 always @(posedge clk)
 		begin
-		out<=in0;
+		out=in0;
 		end
 
 endmodule
@@ -117,9 +117,9 @@ always @(*)
 		out <= memory[address];
 		end
 initial begin
-memory[0] = 0;
-memory[1] = 1;
-memory[2] = 2;
+memory[0] = 1;
+memory[1] = 2;
+memory[2] = 3;
 end
 endmodule
 
@@ -143,7 +143,7 @@ reg[31:0] out;
 input clk;
 always @(posedge clk)
 		 begin
-		 out<= in0;
+		 out <= in0;
 		 end
 endmodule
 
@@ -166,7 +166,6 @@ wire[31:0] instructionout;
 wire[31:0] ir2output;
 wire[31:0] ir2input;
 reg[31:0] nop;
-
 mux4 pcmux(z4,pcincremented,pcoutput,branchaddress,selectmux0,pcinput);
 dff pc(pcinput,clk,pcoutput);
 pcincrement pcinc(pcoutput,pcincremented);
@@ -176,6 +175,29 @@ instruction_memory ins(pcoutput,instructionout);
 mux4 ir2mux(instructionout,nop,ir2output,ir2output,selectmux1,ir2input);
 dff ir2(ir2input,clk,ir2output);
 initial begin
-nop = 0;
+$monitor($time,"%d",pcoutput);
+nop = 1;
 end
 endmodule 
+
+module test;
+reg [31:0]z4;
+reg [1:0] selectmux0;
+reg[1:0] selectmux1;
+reg selectmux2;
+reg clk;
+wire [31:0] ir2output;
+wire [31:0] pc2output;
+always @(*)
+		begin
+#5	clk <= ~clk;
+		end
+instruction_fetch t(z4,selectmux0,selectmux1,selectmux2,clk,ir2output,pc2output);
+initial begin
+//$monitor($time,"%d",ir2output);
+clk <= 0;
+#5 z4 <= 0;selectmux2 <= 0;selectmux0 <= 0;selectmux1 <= 0;
+#10 z4 <=1; selectmux0 <= 2; 
+#50 $finish;
+end
+endmodule
