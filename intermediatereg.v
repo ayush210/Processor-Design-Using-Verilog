@@ -15,19 +15,23 @@ always @(posedge clk)
 endmodule
 
 module test;
-
 reg[31:0] in0;
-reg clk;
 wire[31:0] out;
-intermediatereg r1(in0,clk,out);
+wire clk;
+reg [31:0]out1;
 always @(*)
 		begin
-  #5		clk<=~clk;
+#5 clk <= ~clk;
 		end
+intermediatereg r(in0,clk,out);
 initial begin
-$monitor("%d %d",in0,out);
-in0 = 20;clk = 0;
+$monitor($time,"%d %d ",out,out1);
+clk = 0;in0 = 0;
 end
+always @(*)
+		begin
+		out1 = out + 20;
+		end
 
 endmodule
 
