@@ -24,18 +24,6 @@ always @(*)
 		end
 endmodule
 
-/*module test;
-reg[31:0] in0,in1;
-wire[31:0] out;
-reg select;
-mux2 m(in0,in1,select,out);
-initial begin
-$monitor($time,"in0=%d in1=%d out=%d select=%d",in0,in1,out,select);
-select = 0; in0=0;in1=1;
-#5 select = 1;
-end
-endmodule*/
-
 module mux4(in0,in1,in2,in3,select,out);
 input[31:0] in0,in1,in2,in3;
 input[1:0] select;
@@ -175,7 +163,7 @@ instruction_memory ins(pcoutput,instructionout);
 mux4 ir2mux(instructionout,nop,ir2output,ir2output,selectmux1,ir2input);
 dff ir2(ir2input,clk,ir2output);
 initial begin
-$monitor($time,"%d",pcoutput);
+//$monitor($time,"%d",pcoutput);
 nop = 1;
 end
 endmodule 
@@ -194,7 +182,7 @@ always @(*)
 		end
 instruction_fetch t(z4,selectmux0,selectmux1,selectmux2,clk,ir2output,pc2output);
 initial begin
-//$monitor($time,"%d",ir2output);
+$monitor($time,"%d",ir2output);
 clk <= 0;
 #5 z4 <= 0;selectmux2 <= 0;selectmux0 <= 0;selectmux1 <= 0;
 #10 z4 <=1; selectmux0 <= 2; 
